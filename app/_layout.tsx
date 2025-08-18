@@ -1,6 +1,15 @@
 import { Stack } from "expo-router";
+import { View } from "react-native";
 import "./global.css";
 
 export default function RootLayout() {
-  return <Stack />;
+  return (
+    <View className="flex-1">
+      <Stack>
+        <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="register" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
+    </View>
+  );
 }
