@@ -1,13 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import {
-  FlatList,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 const FocusHistory = () => {
   const navigation = useNavigation();
@@ -42,7 +36,7 @@ const FocusHistory = () => {
   );
 
   return (
-    <ScrollView className="flex-1 bg-white px-5 py-6">
+    <View className="flex-1 bg-white px-5 py-6">
       <View className="flex-row items-center mb-6 space-x-16">
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={45} color="#6A9BCC" />
@@ -78,7 +72,7 @@ const FocusHistory = () => {
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
-    </ScrollView>
+    </View>
   );
 };
 
