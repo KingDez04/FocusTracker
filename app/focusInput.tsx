@@ -12,7 +12,7 @@ import {
 import Toast from "react-native-toast-message";
 
 type RootStackParamList = {
-  Home: {
+  Timer: {
     focusDuration: string;
     shortBreak: string;
     longBreak: string;
@@ -58,7 +58,7 @@ const FocusInput: React.FC = () => {
         // await AsyncStorage.setItem("authToken", access);
 
         Toast.show({ type: "success", text1: message });
-        navigation.replace("Home", {
+        navigation.replace("Timer", {
           focusDuration: data.focusDuration,
           shortBreak: data.shortBreak,
           longBreak: data.longBreak,

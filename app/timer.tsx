@@ -14,16 +14,16 @@ interface RouteParams {
 }
 
 type RootStackParamList = {
-  Home: undefined;
+  Timer: undefined;
   focusInput: undefined;
 };
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<
+type TimerScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  "Home"
+  "Timer"
 >;
 
-export default function Home() {
+export default function Timer() {
   const route = useRoute();
   const {
     focusDuration = 25,
@@ -31,7 +31,7 @@ export default function Home() {
     longBreak = 15,
     longBreakInterval = 2,
   } = (route.params as RouteParams) || {};
-  const navigation = useNavigation<HomeScreenNavigationProp>();
+  const navigation = useNavigation<TimerScreenNavigationProp>();
 
   const [currentMode, setCurrentMode] = useState<TimerMode>("focus");
   const [totalSeconds, setTotalSeconds] = useState<number>(focusDuration * 60);
