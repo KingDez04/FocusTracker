@@ -6,6 +6,8 @@ export default function RootLayout() {
   return (
     <View className="flex-1">
       <Stack>
+        <Stack.Screen name="focusInput" options={{ headerShown: false }} />
+        <Stack.Screen name="home" options={{ headerShown: false }} />
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="register" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
