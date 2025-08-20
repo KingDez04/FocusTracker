@@ -55,6 +55,20 @@ const _layout = () => {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="focusInput"
+        options={{
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name="timer"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 };
