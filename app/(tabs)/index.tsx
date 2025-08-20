@@ -1,12 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
 type RootStackParamList = {
   Index: undefined;
@@ -23,7 +17,7 @@ const Index = () => {
 
   return (
     <SafeAreaView>
-      <ScrollView className="flex h-screen justify-center bg-white px-6">
+      <View className="flex h-screen justify-center bg-white px-6">
         <Text className="text-[32px] font-extrabold text-[#007BFF] leading-[100%] text-center">
           Welcome to Focus Tracker
         </Text>
@@ -59,7 +53,7 @@ const Index = () => {
             </Text>
           </View>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

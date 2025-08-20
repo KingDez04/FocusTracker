@@ -84,7 +84,7 @@ const Register: React.FC = () => {
 
   return (
     <ScrollView>
-      <View className="flex-1 items-center justify-center p-5">
+      <View className="flex-1 h-screen items-center justify-center p-5">
         <View className="flex justify-center mb-5">
           <Image source={require("../assets/images/register.png")} />
         </View>
