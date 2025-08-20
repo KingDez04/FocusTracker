@@ -9,47 +9,42 @@ import Toast from "react-native-toast-message";
 
 type RootStackParamList = {
   Home: undefined;
-  Login: undefined;
+  login: undefined;
   register: undefined;
-  passwordReset: undefined;
+  PasswordReset: undefined;
 };
 
-type LoginScreenNavigationProp = NativeStackNavigationProp<
+type PasswordResetNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  "Login"
+  "PasswordReset"
 >;
 
-interface LoginFormInputs {
+interface ResetFormInputs {
   email: string;
-  password: string;
 }
 
-const Login: React.FC = () => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const navigation = useNavigation<LoginScreenNavigationProp>();
+const PasswordReset: React.FC = () => {
+  const navigation = useNavigation<PasswordResetNavigationProp>();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormInputs>();
+  } = useForm<ResetFormInputs>();
 
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible((prev) => !prev);
-  };
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (data: LoginFormInputs) => {
+  const onSubmit = async (data: ResetFormInputs) => {
     try {
-      const response = await axios.post("api/auth/login/", data, {
+      setLoading(true);
+      const response = await axios.post("api/auth/forgot-password/", data, {
         headers: { "Content-Type": "application/json" },
       });
 
-      const { access, message } = response.data;
+      const { message } = response.data;
       if (response.status === 200) {
-        // await AsyncStorage.setItem("authToken", access);
-
         Toast.show({ type: "success", text1: message });
-        navigation.replace("Home");
+        navigation.navigate("login");
       }
     } catch (error: any) {
       const status = error.response?.status;
@@ -71,6 +66,8 @@ const Login: React.FC = () => {
             text1: "An unexpected error occurred. Please try again.",
           });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,10 +77,10 @@ const Login: React.FC = () => {
         <Image source={require("../assets/images/login.png")} />
       </View>
       <Text className="text-[27.31px] font-bold mb-3 text-[#007BFF] leading-[100%]">
-        Sign In
+        Forgot Password
       </Text>
       <Text className="text-[13.65px] font-medium mb-3 text-[#6A9BCC] leading-[100%]">
-        Enter username & password to continue
+        Enter your email to reset your password
       </Text>
 
       <View>
@@ -123,73 +120,33 @@ const Login: React.FC = () => {
           <Text className="text-red-600 mb-2">{errors.email.message}</Text>
         )}
 
-        <Controller
-          control={control}
-          name="password"
-          rules={{ required: "Password is required" }}
-          render={({ field: { onChange, value } }) => (
-            <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border-[1.71px] border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row justify-between items-center">
-              <View className="flex flex-row items-center">
-                <Ionicons
-                  name={"lock-closed"}
-                  size={22}
-                  color="#6A9BCC"
-                  style={{ marginRight: 8 }}
-                />
-                <TextInput
-                  className="flex-1 font-medium text-[17.07px] h-[58.03px] outline-none"
-                  placeholder="Password"
-                  placeholderTextColor="#6A9BCC"
-                  secureTextEntry={!isPasswordVisible}
-                  value={value}
-                  onChangeText={onChange}
-                />
-              </View>
-              <TouchableOpacity onPress={togglePasswordVisibility}>
-                <Ionicons
-                  name={isPasswordVisible ? "eye-off" : "eye"}
-                  size={22}
-                  color="#6A9BCC"
-                />
-              </TouchableOpacity>
-            </View>
-          )}
-        />
-        {errors.password && (
-          <Text className="text-red-600 mb-2">{errors.password.message}</Text>
-        )}
-
-        <TouchableOpacity onPress={() => navigation.navigate("passwordReset")}>
-          <Text className="text-[#6A9BCC] hover:text-[#003cff] font-semibold text-[13.65px] mt-5 leading-[100%] text-end">
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-
         <View className="flex justify-center items-center">
           <TouchableOpacity
-            className="bg-[#007BFFEB] hover:bg-[#003cff] rounded-[12.8px] w-[253.47px] h-[59.74px] justify-center items-center mt-4"
+            disabled={loading}
+            className={`rounded-[12.8px] w-[253.47px] h-[59.74px] justify-center items-center mt-4 ${
+              loading ? "bg-gray-400" : "bg-[#007BFFEB] hover:bg-[#003cff]"
+            }`}
             onPress={handleSubmit(onSubmit)}
           >
             <Text className="text-white font-bold text-[20px] leading-[100%]">
-              Login
+              {loading ? "Sending..." : "Reset Password"}
             </Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <Text className="text-[#6A9BCC] mt-2">
-        Don’t have an account?{" "}
-        <Text
-          className="text-[#007BFFEB] hover:text-[#003cff]"
-          onPress={() => navigation.navigate("register")}
-        >
-          Sign Up
+      <TouchableOpacity
+        className="mt-4"
+        onPress={() => navigation.navigate("login")}
+      >
+        <Text className="text-[#007BFFEB] hover:text-[#003cff] font-semibold text-[13.65px]">
+          Back to Login
         </Text>
-      </Text>
+      </TouchableOpacity>
 
       <Toast />
     </View>
   );
 };
 
-export default Login;
+export default PasswordReset;
