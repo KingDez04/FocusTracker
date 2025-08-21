@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import axios from "axios";
@@ -40,15 +41,21 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-      const response = await axios.post("api/auth/login/", data, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.post(
+        "https://focustracker.onrender.com/api/user/login/",
+        data,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       const { access, message } = response.data;
-      if (response.status === 200) {
-        // await AsyncStorage.setItem("authToken", access);
 
-        Toast.show({ type: "success", text1: message });
+      if (response.status === 200 && access) {
+        await AsyncStorage.setItem("authToken", access);
+
+        Toast.show({ type: "success", text1: message || "Login successful" });
+
         navigation.replace("Home");
       }
     } catch (error: any) {
@@ -58,6 +65,9 @@ const Login: React.FC = () => {
       switch (status) {
         case 400:
           Toast.show({ type: "error", text1: errorMessage || "Invalid data." });
+          break;
+        case 401:
+          Toast.show({ type: "error", text1: "Invalid credentials." });
           break;
         case 500:
           Toast.show({
@@ -101,13 +111,13 @@ const Login: React.FC = () => {
             <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border-[1.71px] border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row justify-between items-center mb-3">
               <View className="flex flex-row items-center">
                 <Ionicons
-                  name={"mail"}
+                  name="mail"
                   size={22}
                   color="#6A9BCC"
                   style={{ marginRight: 8 }}
                 />
                 <TextInput
-                  className="flex-1 font-medium text-[17.07px] h-[58.03px] outline-none"
+                  className="flex-1 font-medium text-[17.07px] h-[58.03px]"
                   placeholder="Email"
                   placeholderTextColor="#6A9BCC"
                   keyboardType="email-address"
@@ -131,13 +141,13 @@ const Login: React.FC = () => {
             <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border-[1.71px] border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row justify-between items-center">
               <View className="flex flex-row items-center">
                 <Ionicons
-                  name={"lock-closed"}
+                  name="lock-closed"
                   size={22}
                   color="#6A9BCC"
                   style={{ marginRight: 8 }}
                 />
                 <TextInput
-                  className="flex-1 font-medium text-[17.07px] h-[58.03px] outline-none"
+                  className="flex-1 font-medium text-[17.07px] h-[58.03px]"
                   placeholder="Password"
                   placeholderTextColor="#6A9BCC"
                   secureTextEntry={!isPasswordVisible}
@@ -160,7 +170,7 @@ const Login: React.FC = () => {
         )}
 
         <TouchableOpacity onPress={() => navigation.navigate("passwordReset")}>
-          <Text className="text-[#6A9BCC] hover:text-[#003cff] font-semibold text-[13.65px] mt-5 leading-[100%] text-end">
+          <Text className="text-[#6A9BCC] font-semibold text-[13.65px] mt-5 text-end">
             Forgot Password?
           </Text>
         </TouchableOpacity>
@@ -170,9 +180,7 @@ const Login: React.FC = () => {
             className="bg-[#007BFFEB] hover:bg-[#003cff] rounded-[12.8px] w-[253.47px] h-[59.74px] justify-center items-center mt-4"
             onPress={handleSubmit(onSubmit)}
           >
-            <Text className="text-white font-bold text-[20px] leading-[100%]">
-              Login
-            </Text>
+            <Text className="text-white font-bold text-[20px]">Login</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -180,7 +188,7 @@ const Login: React.FC = () => {
       <Text className="text-[#6A9BCC] mt-2">
         Don’t have an account?{" "}
         <Text
-          className="text-[#007BFFEB] hover:text-[#003cff]"
+          className="text-[#007BFFEB]"
           onPress={() => navigation.navigate("register")}
         >
           Sign Up

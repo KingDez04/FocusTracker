@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import axios from "axios";
@@ -48,15 +49,23 @@ const Register: React.FC = () => {
 
   const onSubmit = async (data: RegisterFormInputs) => {
     try {
-      const response = await axios.post("api/auth/register/", data, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.post(
+        "https://focustracker.onrender.com/api/user/register/",
+        data,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       const { access, message } = response.data;
-      if (response.status === 200) {
-        // await AsyncStorage.setItem("authToken", access);
 
-        Toast.show({ type: "success", text1: message });
+      if (response.status === 200) {
+        await AsyncStorage.setItem("authToken", access);
+
+        Toast.show({
+          type: "success",
+          text1: message || "Registration successful!",
+        });
         navigation.replace("Home");
       }
     } catch (error: any) {
@@ -99,28 +108,22 @@ const Register: React.FC = () => {
           <Controller
             control={control}
             name="firstName"
-            rules={{
-              required: "First name is required",
-            }}
+            rules={{ required: "First name is required" }}
             render={({ field: { onChange, value } }) => (
-              <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border-[1.71px] border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row justify-between items-center mb-3">
-                <View className="flex flex-row items-center">
-                  <Ionicons
-                    name={"person"}
-                    size={22}
-                    color="#6A9BCC"
-                    style={{ marginRight: 8 }}
-                  />
-                  <TextInput
-                    className="flex-1 font-medium text-[17.07px] h-[58.03px] outline-none"
-                    placeholder="First Name"
-                    placeholderTextColor="#6A9BCC"
-                    keyboardType="default"
-                    autoCapitalize="none"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                </View>
+              <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row items-center mb-3">
+                <Ionicons
+                  name="person"
+                  size={22}
+                  color="#6A9BCC"
+                  style={{ marginRight: 8 }}
+                />
+                <TextInput
+                  className="flex-1 font-medium text-[17.07px]"
+                  placeholder="First Name"
+                  placeholderTextColor="#6A9BCC"
+                  value={value}
+                  onChangeText={onChange}
+                />
               </View>
             )}
           />
@@ -133,28 +136,22 @@ const Register: React.FC = () => {
           <Controller
             control={control}
             name="lastName"
-            rules={{
-              required: "Last name is required",
-            }}
+            rules={{ required: "Last name is required" }}
             render={({ field: { onChange, value } }) => (
-              <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border-[1.71px] border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row justify-between items-center mb-3">
-                <View className="flex flex-row items-center">
-                  <Ionicons
-                    name={"person"}
-                    size={22}
-                    color="#6A9BCC"
-                    style={{ marginRight: 8 }}
-                  />
-                  <TextInput
-                    className="flex-1 font-medium text-[17.07px] h-[58.03px] outline-none"
-                    placeholder="Last Name"
-                    placeholderTextColor="#6A9BCC"
-                    keyboardType="default"
-                    autoCapitalize="none"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                </View>
+              <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row items-center mb-3">
+                <Ionicons
+                  name="person"
+                  size={22}
+                  color="#6A9BCC"
+                  style={{ marginRight: 8 }}
+                />
+                <TextInput
+                  className="flex-1 font-medium text-[17.07px]"
+                  placeholder="Last Name"
+                  placeholderTextColor="#6A9BCC"
+                  value={value}
+                  onChangeText={onChange}
+                />
               </View>
             )}
           />
@@ -173,24 +170,22 @@ const Register: React.FC = () => {
               },
             }}
             render={({ field: { onChange, value } }) => (
-              <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border-[1.71px] border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row justify-between items-center mb-3">
-                <View className="flex flex-row items-center">
-                  <Ionicons
-                    name={"mail"}
-                    size={22}
-                    color="#6A9BCC"
-                    style={{ marginRight: 8 }}
-                  />
-                  <TextInput
-                    className="flex-1 font-medium text-[17.07px] h-[58.03px] outline-none"
-                    placeholder="Email"
-                    placeholderTextColor="#6A9BCC"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                </View>
+              <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row items-center mb-3">
+                <Ionicons
+                  name="mail"
+                  size={22}
+                  color="#6A9BCC"
+                  style={{ marginRight: 8 }}
+                />
+                <TextInput
+                  className="flex-1 font-medium text-[17.07px]"
+                  placeholder="Email"
+                  placeholderTextColor="#6A9BCC"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  value={value}
+                  onChangeText={onChange}
+                />
               </View>
             )}
           />
@@ -203,23 +198,21 @@ const Register: React.FC = () => {
             name="password"
             rules={{ required: "Password is required" }}
             render={({ field: { onChange, value } }) => (
-              <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border-[1.71px] border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row justify-between items-center">
-                <View className="flex flex-row items-center">
-                  <Ionicons
-                    name={"lock-closed"}
-                    size={22}
-                    color="#6A9BCC"
-                    style={{ marginRight: 8 }}
-                  />
-                  <TextInput
-                    className="flex-1 font-medium text-[17.07px] h-[58.03px] outline-none"
-                    placeholder="Password"
-                    placeholderTextColor="#6A9BCC"
-                    secureTextEntry={!isPasswordVisible}
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                </View>
+              <View className="w-[311.5px] h-[58.03px] bg-[#FEFBFB33] border border-[#968F8F8C] rounded-[12.8px] px-4 flex flex-row items-center">
+                <Ionicons
+                  name="lock-closed"
+                  size={22}
+                  color="#6A9BCC"
+                  style={{ marginRight: 8 }}
+                />
+                <TextInput
+                  className="flex-1 font-medium text-[17.07px]"
+                  placeholder="Password"
+                  placeholderTextColor="#6A9BCC"
+                  secureTextEntry={!isPasswordVisible}
+                  value={value}
+                  onChangeText={onChange}
+                />
                 <TouchableOpacity onPress={togglePasswordVisibility}>
                   <Ionicons
                     name={isPasswordVisible ? "eye-off" : "eye"}
@@ -239,9 +232,7 @@ const Register: React.FC = () => {
               className="bg-[#007BFFEB] hover:bg-[#003cff] rounded-[12.8px] w-[253.47px] h-[59.74px] justify-center items-center mt-4"
               onPress={handleSubmit(onSubmit)}
             >
-              <Text className="text-white font-bold text-[20px] leading-[100%]">
-                Register
-              </Text>
+              <Text className="text-white font-bold text-[20px]">Register</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -249,7 +240,7 @@ const Register: React.FC = () => {
         <Text className="text-[#6A9BCC] mt-2">
           Already have an account?{" "}
           <Text
-            className="text-[#007BFFEB] hover:text-[#003cff]"
+            className="text-[#007BFFEB]"
             onPress={() => navigation.navigate("login")}
           >
             Sign In

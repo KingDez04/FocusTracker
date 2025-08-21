@@ -37,9 +37,13 @@ const PasswordReset: React.FC = () => {
   const onSubmit = async (data: ResetFormInputs) => {
     try {
       setLoading(true);
-      const response = await axios.post("api/auth/forgot-password/", data, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.post(
+        "https://focustracker.onrender.com/api/user/forgot-password/",
+        data,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       const { message } = response.data;
       if (response.status === 200) {

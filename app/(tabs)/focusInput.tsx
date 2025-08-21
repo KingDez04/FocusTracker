@@ -46,7 +46,7 @@ const FocusInput: React.FC = () => {
   const onSubmit = async (data: FocusInputFormInputs) => {
     try {
       const response = await axios.post(
-        "api/auth/focusInput/",
+        "https://focustracker.onrender.com/api/focus/start/",
         { focusDuration: data.focusDuration },
         {
           headers: { "Content-Type": "application/json" },
@@ -55,8 +55,6 @@ const FocusInput: React.FC = () => {
 
       const { access, message } = response.data;
       if (response.status === 200) {
-        // await AsyncStorage.setItem("authToken", access);
-
         Toast.show({ type: "success", text1: message });
         navigation.replace("Timer", {
           focusDuration: data.focusDuration,
