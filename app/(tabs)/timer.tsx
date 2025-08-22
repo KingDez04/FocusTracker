@@ -1,7 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
 type TimerMode = "focus" | "shortBreak" | "longBreak";
@@ -120,6 +124,24 @@ export default function Timer() {
 
     setIsRunning(true);
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      setCurrentMode("focus");
+      setCompletedSessions(0);
+      const newDuration = getCurrentModeDuration("focus");
+      setTotalSeconds(newDuration);
+      setRemainingSeconds(newDuration);
+      setIsRunning(true);
+
+      return () => {
+        if (intervalRef.current !== null) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      };
+    }, [focusDuration, shortBreak, longBreak, longBreakInterval])
+  );
 
   useEffect(() => {
     if (!isRunning) {

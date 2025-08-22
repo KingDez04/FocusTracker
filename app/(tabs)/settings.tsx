@@ -26,9 +26,9 @@ type SettingScreenNavigationProp = NativeStackNavigationProp<
 
 const userData = {
   profile_picture: "",
-  firstName: "Kehinde",
-  lastName: "Akande",
-  email: "kennygee267@gmail.com",
+  firstName: "Ademola",
+  lastName: "Ademeso",
+  email: "ademolaademeso@gmail.com",
 };
 
 export default function SettingsScreen() {

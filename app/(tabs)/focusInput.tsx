@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
 import {
   ScrollView,
@@ -12,7 +11,7 @@ import {
 import Toast from "react-native-toast-message";
 
 type RootStackParamList = {
-  Timer: {
+  timer: {
     focusDuration: string;
     shortBreak: string;
     longBreak: string;
@@ -44,46 +43,13 @@ const FocusInput: React.FC = () => {
   } = useForm<FocusInputFormInputs>();
 
   const onSubmit = async (data: FocusInputFormInputs) => {
-    try {
-      const response = await axios.post(
-        "https://focustracker.onrender.com/api/focus/start/",
-        { focusDuration: data.focusDuration },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      const { access, message } = response.data;
-      if (response.status === 200) {
-        Toast.show({ type: "success", text1: message });
-        navigation.replace("Timer", {
-          focusDuration: data.focusDuration,
-          shortBreak: data.shortBreak,
-          longBreak: data.longBreak,
-          longBreakInterval: data.longBreakInterval,
-        });
-      }
-    } catch (error: any) {
-      const status = error.response?.status;
-      const errorMessage = error.response?.data?.message;
-
-      switch (status) {
-        case 400:
-          Toast.show({ type: "error", text1: errorMessage || "Invalid data." });
-          break;
-        case 500:
-          Toast.show({
-            type: "error",
-            text1: "Internal server error. Please try again later.",
-          });
-          break;
-        default:
-          Toast.show({
-            type: "error",
-            text1: "An unexpected error occurred. Please try again.",
-          });
-      }
-    }
+    navigation.navigate("timer", {
+      focusDuration: data.focusDuration,
+      shortBreak: data.shortBreak,
+      longBreak: data.longBreak,
+      longBreakInterval: data.longBreakInterval,
+    });
+    
   };
 
   return (
